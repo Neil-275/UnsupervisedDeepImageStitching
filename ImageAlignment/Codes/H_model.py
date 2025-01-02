@@ -62,8 +62,8 @@ def build_model(inputs, is_training):
         return net1_f, net2_f, net3_f
 
 def _conv_block(x, num_out_layers, kernel_sizes, strides):
-    conv1 = conv2d(inputs=x, num_outputs=num_out_layers[0], kernel_size=kernel_sizes[0], activation_fn=tf.nn.relu, scope='conv1')
-    conv2 = conv2d(inputs=conv1, num_outputs=num_out_layers[1], kernel_size=kernel_sizes[1], activation_fn=tf.nn.relu, scope='conv2')
+    conv1 = Conv2D(inputs=x, num_outputs=num_out_layers[0], kernel_size=kernel_sizes[0], activation_fn=tf.nn.relu, scope='conv1')
+    conv2 = Conv2D(inputs=conv1, num_outputs=num_out_layers[1], kernel_size=kernel_sizes[1], activation_fn=tf.nn.relu, scope='conv2')
     return conv2
 
 def feature_extractor(image_tf):
@@ -127,9 +127,9 @@ def _H_model(input1, input2, is_training):
       search_range = 16
       global_correlation = cost_volume(tf.nn.l2_normalize(feature1[-1],axis=3), tf.nn.l2_normalize(feature2[-1],axis=3), search_range)   
       #3-convolution layers
-      net1_conv1 = conv2d(inputs=global_correlation, num_outputs=512, kernel_size=3, activation_fn=tf.nn.relu)
-      net1_conv2 = conv2d(inputs=net1_conv1, num_outputs=512, kernel_size=3, activation_fn=tf.nn.relu)
-      net1_conv3 = conv2d(inputs=net1_conv2, num_outputs=512, kernel_size=3, activation_fn=tf.nn.relu)  
+      net1_conv1 = Conv2D(inputs=global_correlation, num_outputs=512, kernel_size=3, activation_fn=tf.nn.relu)
+      net1_conv2 = Conv2D(inputs=net1_conv1, num_outputs=512, kernel_size=3, activation_fn=tf.nn.relu)
+      net1_conv3 = Conv2D(inputs=net1_conv2, num_outputs=512, kernel_size=3, activation_fn=tf.nn.relu)  
       # Flatten dropout_conv4
       net1_flat = slim.flatten(net1_conv3)
       # Two fully-connected layers
@@ -159,9 +159,9 @@ def _H_model(input1, input2, is_training):
       search_range = 8
       local_correlation_2 = cost_volume(tf.nn.l2_normalize(feature1[-2],axis=3), feature2_warp, search_range)   
       #3-convolution layers
-      net2_conv1 = conv2d(inputs=local_correlation_2, num_outputs=256, kernel_size=3, activation_fn=tf.nn.relu)
-      net2_conv2 = conv2d(inputs=net2_conv1, num_outputs=256, kernel_size=3, activation_fn=tf.nn.relu)
-      net2_conv3 = conv2d(inputs=net2_conv2, num_outputs=256, kernel_size=3, activation_fn=tf.nn.relu, stride=2)  
+      net2_conv1 = Conv2D(inputs=local_correlation_2, num_outputs=256, kernel_size=3, activation_fn=tf.nn.relu)
+      net2_conv2 = Conv2D(inputs=net2_conv1, num_outputs=256, kernel_size=3, activation_fn=tf.nn.relu)
+      net2_conv3 = Conv2D(inputs=net2_conv2, num_outputs=256, kernel_size=3, activation_fn=tf.nn.relu, stride=2)  
       # Flatten dropout_conv4
       net2_flat = slim.flatten(net2_conv3)
       # Two fully-connected layers
@@ -191,9 +191,9 @@ def _H_model(input1, input2, is_training):
       search_range = 4
       local_correlation_3 = cost_volume(tf.nn.l2_normalize(feature1[-3],axis=3), feature3_warp, search_range)   
       #3-convolution layers
-      net3_conv1 = conv2d(inputs=local_correlation_3, num_outputs=128, kernel_size=3, activation_fn=tf.nn.relu)
-      net3_conv2 = conv2d(inputs=net3_conv1, num_outputs=128, kernel_size=3, activation_fn=tf.nn.relu, stride=2)
-      net3_conv3 = conv2d(inputs=net3_conv2, num_outputs=128, kernel_size=3, activation_fn=tf.nn.relu, stride=2)  
+      net3_conv1 = Conv2D(inputs=local_correlation_3, num_outputs=128, kernel_size=3, activation_fn=tf.nn.relu)
+      net3_conv2 = Conv2D(inputs=net3_conv1, num_outputs=128, kernel_size=3, activation_fn=tf.nn.relu, stride=2)
+      net3_conv3 = Conv2D(inputs=net3_conv2, num_outputs=128, kernel_size=3, activation_fn=tf.nn.relu, stride=2)  
       # Flatten dropout_conv4
       net3_flat = slim.flatten(net3_conv3)
       # Two fully-connected layers
